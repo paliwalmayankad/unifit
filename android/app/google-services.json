@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "818804257051",
+    "firebase_url": "https://unifit-c6cc0.firebaseio.com",
+    "project_id": "unifit-c6cc0",
+    "storage_bucket": "unifit-c6cc0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:818804257051:android:cfb3feae0d2320211ee3be",
+        "android_client_info": {
+          "package_name": "com.aaronsoftech.unifit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "818804257051-7vr80auic9o6t0sok7krdhj7ji80it0o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.aaronsoftech.unifit",
+            "certificate_hash": "a1a6caaaaeff9d0cde881c928a831958b728b980"
+          }
+        },
+        {
+          "client_id": "818804257051-3c5he4hhaemup3r9slpc5v577rj6a8ut.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAviCxsAa4BIYRlzQDFozzg7TqVuvuIczE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "818804257051-3c5he4hhaemup3r9slpc5v577rj6a8ut.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
