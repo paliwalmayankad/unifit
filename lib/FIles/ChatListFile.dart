@@ -123,7 +123,8 @@ class ChatListFileState extends State<ChatListFile>
                   .document(list[i].toString()).snapshots().listen((cahtdata)
               {
                 ChatListModels cm = new ChatListModels();
-                if (cahtdata.data['contact1'].toString() == usrid) {
+                if (cahtdata.data['contact1'].toString() == usrid)
+                {
                   cm.documentid = cahtdata.documentID;
                   cm.name = cahtdata.data['contact2_name'];
                   cm.photo = cahtdata.data['contact2_photo'];
@@ -158,7 +159,8 @@ class ChatListFileState extends State<ChatListFile>
 
 
                 }
-                else {
+                else
+                  {
                   cm.documentid = cahtdata.documentID;
                   cm.name = cahtdata.data['contact1_name'];
                   cm.photo = cahtdata.data['contact1_photo'];
@@ -199,32 +201,7 @@ class ChatListFileState extends State<ChatListFile>
                   });
                 }
               });
-              //.then((cahtdata) {
-              /* ChatListModels cm = new ChatListModels();
-                if (cahtdata.data['contact1'].toString() == usrid) {
-                  cm.documentid = cahtdata.documentID;
-                  cm.name = cahtdata.data['contact2_name'];
-                  cm.photo = cahtdata.data['contact2_photo'];
-                  cm.lastmessage = cahtdata.data['last_message'];
-                  mychatlist.add(cm);
-                }
-                else {
-                  cm.documentid = cahtdata.documentID;
-                  cm.name = cahtdata.data['contact1_name'];
-                  cm.photo = cahtdata.data['contact1_photo'];
-                  cm.lastmessage = cahtdata.data['last_message'];
-                  mychatlist.add(cm);
-                }
 
-                if(i==list.length-1)
-                  {
-                    setState(()
-                    {
-                      mainstate=true;
-                    });
-                  }*/
-
-              //});
             }
             catch(e)
             {
