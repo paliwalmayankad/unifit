@@ -351,6 +351,7 @@ final Map<int,Widget> segmentvalue=const<int,Widget>{0:Text("1",style: TextStyle
       "followingarray":[],
       "myworkoutlist":[],
       "mychatarraylist":[],
+      "communitieslist":[],
       "healthindicatorshow":false,
       "img":"",
       "pressure":"0",

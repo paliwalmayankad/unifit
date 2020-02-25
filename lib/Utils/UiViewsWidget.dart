@@ -302,7 +302,10 @@ class UiViewsWidget extends BloCSetting {
 
                 ],)),),
                 SizedBox(height: 13,),
-                InkWell(onTap: (){Navigator.of(context).pop();},child: Container(child:Row( children: <Widget>[
+                InkWell(onTap: (){
+                  addState(phoneass.communities);
+                  Navigator.of(context).pop();
+                },child: Container(child:Row( children: <Widget>[
                   Image.asset(ConstantsForImages.drawericoncommunities,height: 30,width: 30,),
                   SizedBox(width: 10,),
                   Text('Communities',style: TextStyle(color: Colors.white,fontSize: 14),)

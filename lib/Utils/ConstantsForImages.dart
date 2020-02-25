@@ -59,6 +59,8 @@ class ConstantsForImages{
   static String settinghelp='assets/help.png';
   static String settingnotification='assets/notifications.png';
   static String settinglogout='assets/log-out.png';
+  static String create='assets/create.png';
+  static String green_plus='assets/green_plus.png';
 
 
 

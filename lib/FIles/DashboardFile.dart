@@ -1,3 +1,5 @@
+import 'package:unifit/FIles/CommunitiesFile.dart';
+import 'package:unifit/FIles/CreateNewCommunityFile.dart';
 import 'package:unifit/FIles/MyBookmarksListFile.dart';
 import 'package:unifit/FIles/MyProfileFile.dart';
 import 'package:unifit/FIles/NewsFile.dart';
@@ -42,9 +44,11 @@ class DashboardFileState extends State<DashboardFile>
  static Widget Screenview;
 
   bool floatingbuttonstatevisible=true;
+  bool dashboardappbar=true;
   GlobalKey<ScaffoldState> scaffoldState= GlobalKey<ScaffoldState>();
   void callback(bool nextPage) {
     setState(() {
+
       this.floatingbuttonstatevisible = nextPage;
     });
   }
@@ -98,9 +102,32 @@ currentPage=0;
         child:AppBar( backgroundColor: MyColors.basegreencolor, // this will hide Drawer hamburger icon
             actions: <Widget>[Container()],
             automaticallyImplyLeading: false,flexibleSpace:
-            Container(padding: new EdgeInsets.only(top: statusbarHeight),
+            Container(
+              alignment: Alignment.center,
+              padding: new EdgeInsets.only(top: statusbarHeight,left: 5,right: 5),
 
-              child: Image.asset(ConstantsForImages.bfitsplashlogo),
+              child:dashboardappbar==true? Image.asset(ConstantsForImages.bfitsplashlogo)
+                  :Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children:
+              <Widget>[
+                Image.asset(ConstantsForImages.bfitsplashlogo,height: 30,width: 30,),
+
+                new Spacer(),
+                Text("Communities",style: TextStyle(fontSize:18,color: MyColors.basetextcolor,fontWeight: FontWeight.bold),),
+                new Spacer(),
+                InkWell(
+                    onTap: ()
+                    {
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=> CreateNewCommunityFile()));
+
+                    },
+                    child:
+                Image.asset(ConstantsForImages.create,height: 30,width: 30,)),
+
+               /* Container(alignment:Alignment.centerRight,child: Image.asset(ConstantsForImages.bfitsplashlogo,height: 30,width: 30,))
+            */  ],),
             )));
 
   }
@@ -113,8 +140,10 @@ currentPage=0;
   void startlistnerformenuitem() {
     UiViewsWidget.statestt.listen((state)
     {
-      if(state==phoneass.Home){
-        setState(() {
+      if(state==phoneass.Home)
+      {
+        setState(()
+        {
           currentPage=0;
           Screenview=HomeFile(this.callback);
         });
@@ -137,6 +166,23 @@ currentPage=0;
           currentPage=1;
         //Screenview=UserMessageFile();
         Screenview=ChatListFile(callback: this.callback,);
+
+
+        });
+
+      }
+      if(state==phoneass.communities)
+      {
+        //Navigator.push(this.context, MaterialPageRoute(builder: (context)=> ChatScreenFile()));
+       // Navigator.push(this.context, MaterialPageRoute(builder: (context)=> CommunitiesFile(callback: this.callback,)));
+
+        setState(()
+        {
+          currentPage=1;
+          floatingbuttonstatevisible=false;
+          dashboardappbar=false;
+          //Screenview=UserMessageFile();
+          Screenview=CommunitiesFile(callback: this.callback,);
 
 
         });
@@ -198,6 +244,8 @@ currentPage=0;
     else{
       setState(() {
         currentPage=0;
+        floatingbuttonstatevisible=true;
+        dashboardappbar=true;
         Screenview=HomeFile(this.callback);
       });
     }

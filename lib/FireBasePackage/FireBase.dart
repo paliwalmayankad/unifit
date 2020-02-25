@@ -1,4 +1,5 @@
 import 'package:unifit/Models/Bookmarkmodels.dart';
+import 'package:unifit/Models/CommunityListDetailFileModels.dart';
 import 'package:unifit/Models/ExerciseDetailTitleModel.dart';
 import 'package:unifit/Models/ExerciseHEaderModel.dart';
 import 'package:unifit/Models/GymListModels.dart';
@@ -156,7 +157,73 @@ class FireBase {
 
   }
 
+  static Future<List<CommunityListDetailFileModels>> getcommunitypost(List commpostlist) async{
+    List<CommunityListDetailFileModels> newslsit= List();
+    /*DocumentSnapshot querySnapshot = await Firestore.instance.collection("commpostlist").document(commpostlist[i]).get();
+    var list = querySnapshot.data['communitiyposts'];*/
+    for(int i=0;i<commpostlist.length;i++){
+    DocumentSnapshot dss= await  Firestore.instance.collection("communitiesitem").document(commpostlist[i]).get();
+      CommunityListDetailFileModels newsmodels =new CommunityListDetailFileModels();
+      newsmodels.communitysid=dss.documentID;
+      newsmodels.communitylikers=dss.data["likes"];
+      newsmodels.communitylikers=dss.data["dislikes"];
+      newsmodels.communityimage=dss.data["image"];
+      newsmodels.communitytitle=dss.data["title"];
+      newsmodels.communitysubtitle=dss.data["subtitle"];
+      newsmodels.communityposttime=dss.data["time"];
+      newsmodels.uploaderimage=dss.data["uploaderimage"];
+      newsmodels.uploadername=dss.data["uploadername"];
+      newsmodels.bookmarkuserlist=dss.data["bookmarks"];
+      newsmodels.description=dss.data["description"];
+      newsmodels.uploaderid=dss.data["uploaderid"];
 
+      /* List<dynamic> bookmarklist=new List();
+      bookmarklist=list[i].data["bookmarks"];
+
+      List<dynamic> likeslist=new List();
+      likeslist=list[i].data["likes"];
+
+      List<dynamic> dislikelist=new List();
+      dislikelist=list[i].data["dislikes"];*/
+
+      String userid=PrefrencesManager.getString(Stringconstants.USERID);
+      //// CHECK BOOKMARK OR NOT
+      try {
+        for (int i = 0; i < newsmodels.bookmarkuserlist.length; i++) {
+          if (userid == newsmodels.bookmarkuserlist[i]) {
+            newsmodels.bookmark = true;
+            break;
+          }
+        }
+        //// CHECK FOR PAGE LIKE
+        for (int i = 0; i < newsmodels.communitylikers.length; i++) {
+          if (userid == newsmodels.communitylikers[i]) {
+            newsmodels.like = true;
+            break;
+          }
+        }
+        //// CHECK FOR PAGE DISLIKE
+
+        for (int i = 0; i < newsmodels.communitydislikers.length; i++) {
+          if (userid == newsmodels.communitydislikers[i]) {
+            newsmodels.dislike = true;
+            break;
+          }
+        }
+      }
+      catch(e)
+      {
+        print(e);
+      }
+
+      newslsit.add(newsmodels);
+
+    }
+
+
+    return newslsit;
+
+  }
   static Future<List<Bookmarkmodels>> getbookmarklist() async{
     List<Bookmarkmodels> bookmarklist= List();
     var querySnapshot = await Firestore.instance.collection("users").document(PrefrencesManager.getString(Stringconstants.USERID)).get();
