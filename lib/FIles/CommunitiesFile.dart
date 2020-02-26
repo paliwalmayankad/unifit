@@ -61,7 +61,24 @@ class CommunitiesFileState extends State<CommunitiesFile>
         
         for(int i=0;i<communitieslistid.length;i++)
         {
-            Firestore.instance.collection("communities").document(communitieslistid[i]).get().then((ondata){
+          DocumentSnapshot dss=await Firestore.instance.collection("communities").document(communitieslistid[i]).get();
+          if(dss!=null)
+            {
+              CommunitiesListModels cmm=new CommunitiesListModels();
+              cmm.documentid= dss.documentID;
+              cmm.title=dss.data['title'];
+              cmm.image=dss.data['image'];
+              cmm.shortdescription=dss.data['shortdescription'];
+              cmm.communitiyposts =dss.data['communitiyposts'];
+              cmm.createrid =dss.data['createrid'];
+              communitylist.add(cmm);
+              if(i==communitieslistid.length-1){
+                setState(() {
+                  mainview=true;
+                });
+              }
+            }
+           /* Firestore.instance.collection("communities").document(communitieslistid[i]).get().then((ondata){
               CommunitiesListModels cmm=new CommunitiesListModels();
               cmm.documentid= ondata.documentID;
               cmm.title=ondata.data['title'];
@@ -75,7 +92,7 @@ class CommunitiesFileState extends State<CommunitiesFile>
                   mainview=true;
                 });
               }
-            });
+            });*/
           
           
           
@@ -172,11 +189,21 @@ class CommunitiesFileState extends State<CommunitiesFile>
                   mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: <Widget>[
-                    Container(
+                   InkWell(
+                   onTap:(){
+                     if(communitylist[index].createrid==PrefrencesManager.getString(Stringconstants.USERID)){
+                       _leftcommordeletecomm(true,communitylist[index],index);
+                     }
+                     else{
+                       _leftcommordeletecomm(false,communitylist[index],index);
+                     }
+
+                   },
+                     child:Container(
                       decoration:UiViewsWidget.greyblackcolorbackground(),
                       padding: EdgeInsets.only(top: 5,bottom: 5,left: 10,right: 10),
                       child:communitylist[index].createrid==PrefrencesManager.getString(Stringconstants.USERID)? Text("Delete",style: TextStyle(color:Colors.white)):Text("Left",style: TextStyle(color:Colors.white)),),
-                  ],),),
+                   )],),),
 
 
               ]);
@@ -189,5 +216,37 @@ class CommunitiesFileState extends State<CommunitiesFile>
         style: TextStyle(color: MyColors.basetextcolor,fontWeight: FontWeight.bold),),),
 
     );
+  }
+
+  void _leftcommordeletecomm(bool param0, CommunitiesListModels comlist, int index)
+  {
+    //// ifparam0== true meansd to dele comm or just leave the comm
+    UiViewsWidget.showprogressdialogcomplete(context, true);
+
+    if(param0==true)
+    {
+      Firestore.instance.collection("communities").document(comlist.documentid).delete().then((ondata){
+        // UPDATE COMMUNITY ID ADD USER LIST
+        setState(() {
+          communitylist.removeAt(index);
+        });
+        UiViewsWidget.showprogressdialogcomplete(context, false);
+      });
+     // UiViewsWidget.showprogressdialogcomplete(context, false);
+    }
+
+    else
+      {
+      Firestore.instance.collection("users").document(PrefrencesManager.getString(Stringconstants.USERID)).updateData({"communitieslist":FieldValue.arrayRemove([comlist.documentid])}).then((ondata){
+        // UPDATE COMMUNITY ID ADD USER LIST
+        setState(() {
+          communitylist.removeAt(index);
+        });
+        UiViewsWidget.showprogressdialogcomplete(context, false);
+        
+      });
+    }
+
+
   }
 }

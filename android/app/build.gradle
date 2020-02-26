@@ -32,7 +32,8 @@ android {
         main.java.srcDirs += 'src/main/kotlin'
     }
 
-    lintOptions {
+    lintOptions
+            {
         disable 'InvalidPackage'
     }
 

@@ -8,6 +8,7 @@ import 'package:unifit/Utils/ConstantsForImages.dart';
 import 'package:unifit/Utils/MyColors.dart';
 import 'package:unifit/Utils/UiViewsWidget.dart';
 
+import 'AddMEmberToCommunityFile.dart';
 import 'CommunitypostViewWidget.dart';
 
 class CommunitiesDetailListFile extends StatefulWidget
@@ -178,7 +179,7 @@ class CommunitiesDetailListFileState extends State<CommunitiesDetailListFile>
                   InkWell(
                       onTap: ()
                       {
-                        //Navigator.push(context, MaterialPageRoute(builder: (context)=> CreateNewCommunityFile()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=> AddMEmberToCommunityFile(communityid: widget.comid,)));
 
                       },
                       child:
