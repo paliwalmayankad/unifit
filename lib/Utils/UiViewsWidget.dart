@@ -1,7 +1,13 @@
 import 'dart:async';
 
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
+import 'package:toast/toast.dart';
+import 'package:unifit/FIles/CoronaVirusQuestionFile.dart';
 import 'package:unifit/FIles/DashboardFile.dart';
 import 'package:unifit/FIles/MyProfileFile.dart';
+import 'package:unifit/FIles/QuestionChatHomeGridDataFile.dart';
 import 'package:unifit/Models/HomeGridItemModel.dart';
 import 'package:unifit/Models/NewsModels.dart';
 import 'package:unifit/Utils/ConstantsForImages.dart';
@@ -9,6 +15,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:unifit/Utils/PrefrencesManager.dart';
+import 'package:unifit/Utils/Stringconstants.dart';
 
 import 'MyColors.dart';
 enum phoneass { Home,profile, message, communities, bookmarks,exercise, workout, trainers,invitefriend, news,gym,setting }
@@ -18,6 +26,9 @@ class UiViewsWidget extends BloCSetting {
   final StreamController<bool> sstream = StreamController<bool>.broadcast();
   static StreamController<phoneass> phoneauthstates = StreamController(sync: true);
   static Stream statestt = phoneauthstates.stream;
+  static BuildContext conte;
+  static HomeGridItemModel publichomegriddata;
+
   static  BoxDecoration Backgroundwithgradient(){
     return BoxDecoration(
 
@@ -72,57 +83,94 @@ class UiViewsWidget extends BloCSetting {
   static Container GridItemView(HomeGridItemModel griddata,BuildContext cont){
     return Container( height:140,margin: EdgeInsets.only(top: 0,bottom: 0,left: 0,right: 0),
       //width: 150,
-      child: InkWell(
-          onTap: (){
+      child:
+      Card(
+          color: Colors.white,
+          elevation: 5,
 
-            /*showDialog(barrierDismissible: true,
+          child:
+          InkWell(
+              onTap: (){
+
+                /*showDialog(barrierDismissible: true,
               context: cont,
                 builder: (BuildContext context) {
                  return Center(child: Dialog(child:   homefacilitydialog(
                       griddata.texttitle, griddata.facilities, cont)));
 
                 });*/
-            showGeneralDialog(context: cont,barrierDismissible: true,
-                barrierLabel: MaterialLocalizations.of(cont)
-                    .modalBarrierDismissLabel,
-                barrierColor: Colors.black45,
-                transitionDuration: const Duration(milliseconds: 200),
-                pageBuilder: (BuildContext buildContext,
-                    Animation animation,
-                    Animation secondaryAnimation) {return
-                  homefacilitydialog(
-                      griddata.texttitle, griddata.facilities, cont,griddata);
-                });
 
-          },
-          child:  Container(height:140,
+                if(griddata.isquery==true){
+                  Navigator.push(cont, MaterialPageRoute(builder: (context)=> CoronoVirusQuestionFile()));
 
 
-            child:
-            Stack(overflow: Overflow.visible,
-              children: <Widget>[
-                FadeInImage(
-                  height: 140,
+                }
+                else{
+                  showGeneralDialog(context: cont,barrierDismissible: true,
+                      barrierLabel: MaterialLocalizations.of(cont)
+                          .modalBarrierDismissLabel,
+                      barrierColor: Colors.black45,
+                      transitionDuration: const Duration(milliseconds: 200),
+                      pageBuilder: (BuildContext buildContext,
+                          Animation animation,
+                          Animation secondaryAnimation) {return
+                        homefacilitydialog(
+                            griddata.texttitle, griddata.facilities, cont,griddata);
+                      });
+                }
 
-                  fit: BoxFit.fill,
-                  image: NetworkImage(griddata.img), placeholder: AssetImage(ConstantsForImages.imgplaceholder),),
 
-                Container(decoration: lightgreycolorsquaretrans(),height:140,
-                    //width: 150,
-                    child: Align( alignment:Alignment.bottomCenter,
-                      child:Padding(padding: EdgeInsets.only(bottom: 5),
-                        child: Text(griddata.texttitle.toUpperCase(),style: TextStyle(color: Colors.white,),textAlign: TextAlign.center,),),
-                    ))
-              ],
-            ),
-          )),
+
+
+              },
+              child:  Container(height:140,
+
+
+                child:
+                Column(crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    ClipRRect(
+
+                      borderRadius: BorderRadius.circular(
+                          25.0),
+                      child:
+                      Container(
+                        color: MyColors.basetextcolor,
+                        padding: EdgeInsets.all(2),
+
+                        child: FadeInImage(
+                        height: 45,
+                        width: 45,
+
+                        fit: BoxFit.cover,
+                        image: NetworkImage(
+                            griddata.img,
+
+
+                        ),
+                        placeholder: AssetImage(
+                            ConstantsForImages
+                                .imgplaceholder),)
+                        ,
+                      ),
+                    ),
+                    SizedBox(height: 5,),
+
+                    Text(griddata.texttitle.toUpperCase(),style: TextStyle(color: Colors.black,),textAlign: TextAlign.center,)
+
+
+
+                  ],
+                ),
+              ))),
 
     );
   }
 
   static  BoxDecoration bottomdialogbackground(){
     return BoxDecoration(
-      color:MyColors.basegreencolor,
+      color:Colors.white,
       borderRadius: BorderRadius.only(
           topLeft: Radius.circular(8.0),
 
@@ -241,7 +289,7 @@ class UiViewsWidget extends BloCSetting {
     return Container(
 
         child: new Container
-          (width: 200,height: double.infinity, color: MyColors.basetextcolor,
+          (width: 200,height: double.infinity, color: Colors.white,
             child:
             Container(margin: EdgeInsets.only(left: 30,top:statusbarHeight+40 ), child:
             SingleChildScrollView(scrollDirection: Axis.vertical, child:
@@ -258,7 +306,7 @@ class UiViewsWidget extends BloCSetting {
                       children: <Widget>[
                         Image.asset(ConstantsForImages.bfitsplashlogo,height: 80,width: 80,)
                         ,SizedBox(height: 15,),
-                        Text("BASE FREE PLAN",style: TextStyle(color: Colors.white),textAlign: TextAlign.center,)
+                        Text("BASE FREE PLAN",style: TextStyle(color: MyColors.basetextcolor),textAlign: TextAlign.center,)
 
 
                       ],),),),
@@ -273,7 +321,7 @@ class UiViewsWidget extends BloCSetting {
                   Row(  children: <Widget>[
                     Image.asset(ConstantsForImages.bfitsplashlogo,height: 30,width: 30,),
                     SizedBox(width: 10,),
-                    Text('Home',style: TextStyle(color: Colors.white,fontSize: 14),)
+                    Text('Home',style: TextStyle(color: MyColors.basetextcolor,fontSize: 14),)
 
                   ],)),),
                 SizedBox(height: 13,),
@@ -287,10 +335,10 @@ class UiViewsWidget extends BloCSetting {
                   }, child: Container(child:Row(  children: <Widget>[
                   Image.asset(ConstantsForImages.drawericonmyprofile,height: 30,width: 30,),
                   SizedBox(width: 10,),
-                  Text('My profile',style: TextStyle(color: Colors.white,fontSize: 14),)
+                  Text('My profile',style: TextStyle(color: MyColors.basetextcolor,fontSize: 14),)
 
                 ],)),),
-                SizedBox(height: 13,),
+                /*SizedBox(height: 13,),
                 InkWell(
                   onTap: (){
                     addState(phoneass.message);
@@ -298,9 +346,9 @@ class UiViewsWidget extends BloCSetting {
                   },child: Container(child:Row(  children: <Widget>[
                   Image.asset(ConstantsForImages.drawericonmessage,height: 30,width: 30,),
                   SizedBox(width: 10,),
-                  Text('Messages',style: TextStyle(color: Colors.white,fontSize: 14),)
+                  Text('Messages',style: TextStyle(color:MyColors.basetextcolor,fontSize: 14),)
 
-                ],)),),
+                ],)),),*/
                 SizedBox(height: 13,),
                 InkWell(onTap: (){
                   addState(phoneass.communities);
@@ -308,17 +356,17 @@ class UiViewsWidget extends BloCSetting {
                 },child: Container(child:Row( children: <Widget>[
                   Image.asset(ConstantsForImages.drawericoncommunities,height: 30,width: 30,),
                   SizedBox(width: 10,),
-                  Text('Communities',style: TextStyle(color: Colors.white,fontSize: 14),)
+                  Text('Communities',style: TextStyle(color: MyColors.basetextcolor,fontSize: 14),)
 
                 ],)),),
                 SizedBox(height: 13,),
                 InkWell(onTap: (){
                   Navigator.of(context).pop();
-                addState(phoneass.bookmarks);
+                  addState(phoneass.bookmarks);
                 },child: Container(child:Row(  children: <Widget>[
                   Image.asset(ConstantsForImages.drawericonbookmarks,height: 30,width: 30,),
                   SizedBox(width: 10,),
-                  Text('Bookmarks',style: TextStyle(color: Colors.white,fontSize: 14),)
+                  Text('Bookmarks',style: TextStyle(color: MyColors.basetextcolor,fontSize: 14),)
 
                 ],)),),
                 SizedBox(height: 13,),
@@ -327,7 +375,7 @@ class UiViewsWidget extends BloCSetting {
                 },child: Container(child:Row(  children: <Widget>[
                   Image.asset(ConstantsForImages.drawericonexercise,height: 30,width: 30,),
                   SizedBox(width: 10,),
-                  Text('Exercises',style: TextStyle(color: Colors.white,fontSize: 14),)
+                  Text('Exercises',style: TextStyle(color:MyColors.basetextcolor,fontSize: 14),)
 
                 ],)),),
                 SizedBox(height: 13,),
@@ -336,21 +384,23 @@ class UiViewsWidget extends BloCSetting {
                 },child: Container(child:Row(  children: <Widget>[
                   Image.asset(ConstantsForImages.drawericonworkout,height: 30,width: 30,),
                   SizedBox(width: 10,),
-                  Text('Workouts',style: TextStyle(color: Colors.white,fontSize: 14),)
+                  Text('Workouts',style: TextStyle(color: MyColors.basetextcolor,fontSize: 14),)
 
                 ],)),),
                 SizedBox(height: 13,),
-                InkWell(onTap: (){Navigator.of(context).pop();},child: Container(child:Row(  children: <Widget>[
+                InkWell(onTap: (){Navigator.of(context).pop();
+                addState(phoneass.trainers);
+                },child: Container(child:Row(  children: <Widget>[
                   Image.asset(ConstantsForImages.drawericontrainer,height: 30,width: 30,),
                   SizedBox(width: 10,),
-                  Text('Trainers',style: TextStyle(color: Colors.white,fontSize: 14),)
+                  Text('Trainers',style: TextStyle(color: MyColors.basetextcolor,fontSize: 14),)
 
                 ],)),),
                 SizedBox(height: 13,),
                 InkWell(onTap: (){Navigator.of(context).pop();},child: Container(child:Row(  children: <Widget>[
                   Image.asset(ConstantsForImages.drawericoninvitefriend,height: 30,width: 30,),
                   SizedBox(width: 10,),
-                  Text('Invite friend',style: TextStyle(color: Colors.white,fontSize: 14),)
+                  Text('Invite friend',style: TextStyle(color: MyColors.basetextcolor,fontSize: 14),)
 
                 ],)),),
                 SizedBox(height: 13,),
@@ -358,13 +408,14 @@ class UiViewsWidget extends BloCSetting {
 
                   Navigator.of(context).pop();
                   addState(phoneass.news);
-                },child: Container(child:Row(  children: <Widget>[
-                  Image.asset(ConstantsForImages.drawericonnews,height: 30,width: 30,),
-                  SizedBox(width: 10,),
-                  Text('News',style: TextStyle(color: Colors.white,fontSize: 14),)
+                },
+                  child: Container(child:Row(  children: <Widget>[
+                    Image.asset(ConstantsForImages.drawericonnews,height: 30,width: 30,),
+                    SizedBox(width: 10,),
+                    Text('News',style: TextStyle(color: MyColors.basetextcolor,fontSize: 14),)
 
-                ],)),),
-                SizedBox(height: 13,),
+                  ],)),),
+                /* SizedBox(height: 13,),
                 InkWell(onTap: (){Navigator.of(context).pop();
                 addState(phoneass.gym);
                 },child: Container(child:Row(
@@ -373,14 +424,14 @@ class UiViewsWidget extends BloCSetting {
                     SizedBox(width: 10,),
                     Text('Gym',style: TextStyle(color: Colors.white,fontSize: 14),)
 
-                  ],)),),
+                  ],)),),*/
                 SizedBox(height: 13,),
                 InkWell(onTap: (){Navigator.of(context).pop();
                 addState(phoneass.setting);
                 },child: Container(child:Row(  children: <Widget>[
                   Image.asset(ConstantsForImages.drawericonsetting,height: 30,width: 30,),
                   SizedBox(width: 10,),
-                  Text('Setting',style: TextStyle(color: Colors.white,fontSize: 14),)
+                  Text('Setting',style: TextStyle(color: MyColors.basetextcolor,fontSize: 14),)
 
                 ],)),),
                 SizedBox(height: 13,),
@@ -472,9 +523,9 @@ class UiViewsWidget extends BloCSetting {
 
                     InkWell(
                         onTap: (){
-                      _likesstatechange(newsmodels);
+                          _likesstatechange(newsmodels);
 
-                    },child:newsmodels.like==false?
+                        },child:newsmodels.like==false?
                     Image.asset(
                       ConstantsForImages.unlikepage,
                       height:30,
@@ -531,15 +582,15 @@ class UiViewsWidget extends BloCSetting {
     return
       Card(
           elevation:1,
-          margin: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 16.0),
+          margin: EdgeInsets.fromLTRB(0.0, 0.0, 0.0,1.0),
           borderOnForeground: true,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(0.0),
           ),
           child: Container(
             margin: EdgeInsets.only(
-                top: 8,
-                bottom: 8),
+                top: 2,left: 5,
+                bottom: 2),
             height: 40,
             color: Colors.white,child:
           Row(children:
@@ -549,7 +600,7 @@ class UiViewsWidget extends BloCSetting {
             SizedBox(width: 15,),
             Text("Discover",
               style: TextStyle(color:MyColors.basetextcolor,
-                  fontSize: 26,
+                  fontSize: 22,
                   fontWeight: FontWeight.bold),)
 
           ],
@@ -586,24 +637,76 @@ class UiViewsWidget extends BloCSetting {
     SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child:
-        Container(margin: EdgeInsets.only(top: 0,bottom: 0,left: 0,right: 0), padding: EdgeInsets.only(top: 10,bottom: 10,left: 5,right: 5), decoration:  BoxDecoration(color: MyColors.basetextcolor,
-          shape: BoxShape.rectangle,
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(8.0),
-              bottomLeft: Radius.circular(8.0),
-              bottomRight: Radius.circular(8.0),
-              topRight: Radius.circular(8.0)),
-        ),
-          child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+        Container(margin: EdgeInsets.only(top: 0,bottom: 0,left: 0,right: 0), padding: EdgeInsets.only(top: 10,bottom: 10,left: 5,right: 5),
+          decoration:  BoxDecoration(color: Colors.white,
+            shape: BoxShape.rectangle,
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(8.0),
+                bottomLeft: Radius.circular(8.0),
+                bottomRight: Radius.circular(8.0),
+                topRight: Radius.circular(8.0)),
+          ),
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
+            SizedBox(height: 10,),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+
+                ClipRRect(
+
+                  borderRadius: BorderRadius.circular(
+                      25.0),
+                  child:
+                  Container(child: FadeInImage(
+                    height: 45,
+                    width: 45,
+
+                    fit: BoxFit.fill,
+                    image: NetworkImage(
+                        griddata.img),
+                    placeholder: AssetImage(
+                        ConstantsForImages
+                            .imgplaceholder),),),
+                ),
+                SizedBox(width: 5,),
+
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(title,
+                      style: TextStyle(decoration:TextDecoration.none,color: Colors.black,fontSize: 18),
+
+
+
+
+                    ),
+                    SizedBox(width: 3,),
+                    Text(griddata.subtitle,
+                      style: TextStyle(decoration:TextDecoration.none,color: Colors.black,fontSize: 16),
+
+
+
+
+                    ),
+                  ],)
+              ],),
             SizedBox(height: 15,),
-            Text(title,
-              style: TextStyle(decoration:TextDecoration.none,color: Colors.white,fontSize: 22),
+
+            Container(margin: EdgeInsets.only(left: 15,right: 15),
+              height: 1,
+              color: Colors.black26,),
+            SizedBox(height: 15,),
+
+            Container(
+                margin: EdgeInsets.only(left: 15),
+                child:Text("Benefits",style: TextStyle(color: Colors.black,fontSize: 18),textAlign: TextAlign.center,)),
 
 
 
 
-            ),
-            SizedBox(height: 1),
+
+
 
             ListView.builder(
                 shrinkWrap: true,
@@ -612,18 +715,56 @@ class UiViewsWidget extends BloCSetting {
                 itemCount: facilities.length,
                 itemBuilder: (cont,index){
                   return
-                    Padding(padding: EdgeInsets.only(top: 15,left: 15), child: Text(facilities[index].toString(),style: TextStyle(decoration:TextDecoration.none,color: Colors.white,fontSize: 14)));
+                    Padding(padding: EdgeInsets.only(top: 8,left: 15), child: Text(facilities[index].toString(),style: TextStyle(decoration:TextDecoration.none,color: Colors.black,fontSize: 14)));
 
                 }),
-            SizedBox(height: 15),
-            Text(griddata.priceforbuy+"/- "+griddata.timeduration,
-                style: TextStyle(decoration:TextDecoration.none,color: Colors.white,fontSize: 22)),
+            SizedBox(height: 15,),
+
+            Container(margin: EdgeInsets.only(left: 15,right: 15),
+              height: 1,
+              color: Colors.black26,),
+            SizedBox(height: 15,),
+            Container(alignment: Alignment.center,
+                width: double.infinity,
+                child:  Align(
+                    alignment: Alignment.center,
+                    child:   Container(
+                        alignment: Alignment.center,
+                        child:Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+
+
+                            Text("Price: ",style: TextStyle(decoration:TextDecoration.none,color: Colors.black,fontSize: 20)),
+
+                            Text(griddata.priceforbuy+"/- for "+griddata.timeduration+" "+griddata.monthyeaerday,
+                                style: TextStyle(decoration:TextDecoration.none,color: Colors.black,fontSize: 20))
+
+                          ],)
+
+                    ))),
 
             SizedBox(height: 15,),
-            Container(decoration: greenboxbutton(),
-              padding: EdgeInsets.only(top: 12,bottom: 12,left: 45,right: 45)
-              ,child: Text("BUY",style: TextStyle(decoration:TextDecoration.none,color: MyColors.basetextcolor,fontSize: 14))
-              ,),
+            InkWell(
+
+              onTap: (){
+                publichomegriddata=griddata;
+
+                _razorpaypayment(griddata.priceforbuy,cont);
+                Navigator.of(conte).pop();
+
+              },
+
+
+
+
+              child:
+
+
+              griddata.allredypurchase==false? Container(decoration: greenboxbutton(),alignment: Alignment.center,
+                padding: EdgeInsets.only(top: 12,bottom: 12,left: 45,right: 45)
+                ,child: Text("BUY",style: TextStyle(decoration:TextDecoration.none,color: Colors.white,fontSize: 14))
+                ,):SizedBox(),)
 
 
 
@@ -750,6 +891,11 @@ class UiViewsWidget extends BloCSetting {
     _scaffoldKey.currentState.showSnackBar(new SnackBar(content: new Text(message),));
 
   }
+  static void bottomsnackbarwithpop(BuildContext context,String message,GlobalKey<ScaffoldState> _scaffoldKey){
+    _scaffoldKey.currentState.showSnackBar(new SnackBar(content: new Text(message),));
+    Navigator.of(context).pop();
+
+  }
 
   static String formatdate(var date,String format ){
 
@@ -845,9 +991,9 @@ class UiViewsWidget extends BloCSetting {
       };
     }
     else
-      {
+    {
 
-        //print("clicked");
+      //print("clicked");
       setState()
       {
         print("clicked");
@@ -865,8 +1011,8 @@ class UiViewsWidget extends BloCSetting {
       var eveningclosetime = new DateFormat("hh:mm a").parse(
           eveningclosetimegym);
       final aas = DateFormat("hh:mm a").format(DateTime.now());
-          final currentTime=new DateFormat("hh:mm a").parse(
-              aas);
+      final currentTime=new DateFormat("hh:mm a").parse(
+          aas);
       //final currentTime=
 
       if (currentTime.isAfter(morningopentime) && currentTime.isBefore(morningclosetime)) {
@@ -878,7 +1024,7 @@ class UiViewsWidget extends BloCSetting {
       else {
         gymstatus = "Closed";
       }
-return gymstatus;
+      return gymstatus;
     }
     catch(e){
       print(e);
@@ -889,17 +1035,246 @@ return gymstatus;
 
   }
 
-static String fromdatetoexpiry(String date, int month){
-  try {
-    var myDate = DateFormat('dd/MMM/yyyy').parse(date);
-    var prevMonth = new DateTime(myDate.year, myDate.month + month, myDate.day);
-    return prevMonth.toString();
+  static String fromdatetoexpiry(String date, int month){
+    try {
+      var myDate = DateFormat('dd/MMM/yyyy').parse(date);
+      var prevMonth = new DateTime(myDate.year, myDate.month + month, myDate.day);
+      return prevMonth.toString();
+    }
+    catch(e)
+    {
+      print(e);
+    }
   }
-  catch(e)
+
+  static bool _razorpaypayment(String priceforbuy, BuildContext cont)
   {
-    print(e);
+    Razorpay _razorpay= Razorpay();
+
+    var _razorpays = Razorpay();
+    int asm=int.parse(priceforbuy);
+
+    int amount=(asm*100).round();
+    /* String amouint=amount.toString();
+    int amountses=iamouint.r;*/
+    conte=cont;
+    var options = {
+      'key':  Stringconstants.RAZORPAYPAYMENTKEY,
+      'amount': amount, //in the smallest currency sub-unit.
+      'name': PrefrencesManager.getString(Stringconstants.NAME),
+      'description': 'UNIFIT',
+      'prefill': {
+        'contact': PrefrencesManager.getString(Stringconstants.MOBILE),
+        'email': PrefrencesManager.getString(Stringconstants.EMAIL)
+      }
+    };
+    _razorpays.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+    _razorpay.open(options);
+
+
+
+
   }
-}
+
+  static void _handlePaymentSuccess(PaymentSuccessResponse response)
+  {
+
+    /*/////////
+    Map<String, dynamic> paymentmap =
+    {
+      "date": UiViewsWidget.getcurrentdateasrequireformat("dd/MMM/yyyy"),
+      "payment": publichomegriddata.priceforbuy,
+      "paymentfor": publichomegriddata.timeduration,
+      "paymentforid":publichomegriddata.documentid,
+      "paymentid": response.paymentId,
+      "paymenttitle":publichomegriddata.texttitle,
+      "userid": PrefrencesManager.getString(Stringconstants.USERID),
+
+
+    };
+
+    Firestore.instance.collection('payment').add(paymentmap).then((
+        paymentdata) {
+      String paymentid = paymentdata.documentID;
+      String expdate;
+      if(publichomegriddata.timeduration=="1 year"){
+expdate =UiViewsWidget.fromdatetoexpiry(UiViewsWidget.getcurrentdateasrequireformat("dd/MMM/yyyy").toString(), int.parse("12") );
+      }
+      else{
+        expdate =UiViewsWidget.fromdatetoexpiry(UiViewsWidget.getcurrentdateasrequireformat("dd/MMM/yyyy").toString(), int.parse(publichomegriddata.timeduration) );
+      }
+      //// NOW ADD DATA TO SUBSCRIPTION LIST
+      Map<String, dynamic> subscriptionmap =
+      {
+        "duration": publichomegriddata.timeduration,
+        "payment": publichomegriddata.priceforbuy,
+        "planfor": publichomegriddata.documentid,
+
+        "paymentid": response.paymentId,
+        "planid":publichomegriddata.documentid + " " + publichomegriddata.timeduration + " " +
+            publichomegriddata.priceforbuy,
+        "purchasedate": UiViewsWidget.getcurrentdateasrequireformat(
+            "dd/MMM/yyyy"),
+
+        "purchaseplanfrom": publichomegriddata.documentid,
+        "subscriptionenddate": publichomegriddata.timeduration +""+ " from " +
+            UiViewsWidget.getcurrentdateasrequireformat("dd/MMM/yyyy"),
+        "username": PrefrencesManager.getString(Stringconstants.NAME),
+        "userid": PrefrencesManager.getString(Stringconstants.USERID),
+        "title":publichomegriddata.texttitle,
+        "img":publichomegriddata.img,
+
+        "expdate":expdate,
+
+      };
+      //// ADDD DATA TO FIRESTORE FOR SUBSCRIPTION
+      Firestore.instance.collection("subscription")
+          .add(subscriptionmap)
+          .then((subscriberdata) {
+        String subscriberid = subscriberdata.documentID;
+        ///// ADD DATA SUBSCRIBERID AND PAYMENT ID TO USER
+        Map<String, dynamic> userdetailad =
+        {
+          "subscriptionlist": FieldValue.arrayUnion([subscriberid]),
+          "paymentlist": FieldValue.arrayUnion([paymentid]),
+
+
+        };
+        //// UPDATE DATA ON FIRESTORE
+        Firestore.instance.collection("users").document(
+            PrefrencesManager.getString(Stringconstants.USERID)).updateData(
+            userdetailad).then((userdata) {
+          /////// UPDATE VALUE AT GYM OWNER
+          Firestore.instance.collection("services").document(publichomegriddata.documentid).updateData({"userspayment":FieldValue.arrayUnion([PrefrencesManager.getString(Stringconstants.USERID)])}).then((updatedata){
+            Navigator.push(
+              conte,
+              MaterialPageRoute(builder: (context) => QuestionChatHomeGridDataFile()),
+            );
+
+
+
+          });
+
+
+        });
+      });
+    });
+*/
+
+
+    Map<String, dynamic> paymentmap =
+    {
+      "date": UiViewsWidget.getcurrentdateasrequireformat("dd/MMM/yyyy"),
+      "payment": publichomegriddata.priceforbuy,
+      "paymentfor": publichomegriddata.timeduration,
+      "paymentforid":publichomegriddata.documentid,
+      "paymentid": response.paymentId,
+      "paymenttitle":publichomegriddata.texttitle,
+      "userid": PrefrencesManager.getString(Stringconstants.USERID),
+
+
+    };
+
+    Firestore.instance.collection('payment').add(paymentmap).then((
+        paymentdata) {
+      String paymentid = paymentdata.documentID;
+      String expdate;
+      if(publichomegriddata.timeduration=="1 year"){
+        expdate =UiViewsWidget.fromdatetoexpiry(UiViewsWidget.getcurrentdateasrequireformat("dd/MMM/yyyy").toString(), int.parse("12") );
+      }
+      else{
+        expdate =UiViewsWidget.fromdatetoexpiry(UiViewsWidget.getcurrentdateasrequireformat("dd/MMM/yyyy").toString(), int.parse(publichomegriddata.timeduration) );
+      }
+      //// NOW ADD DATA TO SUBSCRIPTION LIST
+      Map<String, dynamic> subscriptionmap =
+      {
+        "duration": publichomegriddata.timeduration,
+        "payment": publichomegriddata.priceforbuy,
+        "planfor": publichomegriddata.documentid,
+
+        "paymentid": response.paymentId,
+        "planid":publichomegriddata.documentid + " " + publichomegriddata.timeduration + " " +
+            publichomegriddata.priceforbuy,
+        "purchasedate": UiViewsWidget.getcurrentdateasrequireformat(
+            "dd/MMM/yyyy"),
+
+        "purchaseplanfrom": publichomegriddata.documentid,
+        "subscriptionenddate": publichomegriddata.timeduration +""+ " from " +
+            UiViewsWidget.getcurrentdateasrequireformat("dd/MMM/yyyy"),
+        "username": PrefrencesManager.getString(Stringconstants.NAME),
+        "userid": PrefrencesManager.getString(Stringconstants.USERID),
+        "title":publichomegriddata.texttitle,
+        "img":publichomegriddata.img,
+
+        "expdate":expdate,
+
+      };
+      //// ADDD DATA TO FIRESTORE FOR SUBSCRIPTION
+      Firestore.instance.collection("subscription")
+          .add(subscriptionmap)
+          .then((subscriberdata) {
+        String subscriberid = subscriberdata.documentID;
+        ///// ADD DATA SUBSCRIBERID AND PAYMENT ID TO USER
+        Map<String, dynamic> userdetailad =
+        {
+          "subscriptionlist": FieldValue.arrayUnion([subscriberid]),
+          "paymentlist": FieldValue.arrayUnion([paymentid]),
+
+
+        };
+        //// UPDATE DATA ON FIRESTORE
+        Firestore.instance.collection("users").document(
+            PrefrencesManager.getString(Stringconstants.USERID)).updateData(
+            userdetailad).then((userdata) {
+          /////// UPDATE VALUE AT GYM OWNER
+          Firestore.instance.collection("services").document(publichomegriddata.documentid).updateData({"userspayment":FieldValue.arrayUnion([PrefrencesManager.getString(Stringconstants.USERID)])}).then((updatedata){
+
+
+            Navigator.push(
+              conte,
+              MaterialPageRoute(builder: (context) => QuestionChatHomeGridDataFile(docid: publichomegriddata.documentid,)),
+            );
+
+
+
+          });
+
+
+        });
+      });
+    });
+
+
+
+
+
+
+
+
+    ////
+
+
+  }
+
+  static void _handlePaymentError(PaymentFailureResponse response) {
+    // Do something when payment fails
+    /*String jj=response.toString();
+
+     Toast.show("Your Payment transcation is failed for this order. you can try again for this order. ",conte,duration:Toast.LENGTH_SHORT,gravity: Toast.BOTTOM);
+ */
+    /////////
+
+    Toast.show("Your Payment transcation is failed for this order. you can try again for this order. ",conte,duration:Toast.LENGTH_SHORT,gravity: Toast.BOTTOM);
+
+  }
+
+  static void _handleExternalWallet(ExternalWalletResponse response) {
+    // Do something when an external wallet is selected
+    // UiViewsWidget.showprogressdialogcomplete(conte, false);
+    String jj=response.toString();
+  }
 }
 
 class BloCSetting extends State {

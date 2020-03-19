@@ -97,18 +97,20 @@ class CommunitiesDetailListFileState extends State<CommunitiesDetailListFile>
       Container(
         margin: EdgeInsets.only(top: 5,left: 5,right: 5,bottom: 5),
         child:
+
         SingleChildScrollView(
             controller: _hideButtonController,
             scrollDirection: Axis.vertical,
             child:
         Container(
           child: CommunitypostViewWidget(newsfeedlist: communitylistmodel,),
-          
-          
-          
-        ) ),)
+
+        )
+        ),
+      )
           :
-      Center(child:
+      Center(
+        child:
       Text("No Post found,\n ",textAlign: TextAlign.center,
         style: TextStyle(color: MyColors.basetextcolor,fontWeight: FontWeight.bold),),),
 
@@ -159,7 +161,7 @@ class CommunitiesDetailListFileState extends State<CommunitiesDetailListFile>
         preferredSize: Size.fromHeight(40+statusbarHeight),
 
         // here the desired height
-        child:AppBar( backgroundColor: MyColors.basegreencolor, // this will hide Drawer hamburger icon
+        child:AppBar( backgroundColor:Colors.white, // this will hide Drawer hamburger icon
             actions: <Widget>[Container()],
             automaticallyImplyLeading: false,flexibleSpace:
             Container(

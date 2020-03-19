@@ -57,7 +57,7 @@ class AddMEmberToCommunityFileState extends State<AddMEmberToCommunityFile>
         preferredSize: Size.fromHeight(40+statusbarHeight),
 
         // here the desired height
-        child:AppBar( backgroundColor: MyColors.basegreencolor, // this will hide Drawer hamburger icon
+        child:AppBar( backgroundColor: Colors.white, // this will hide Drawer hamburger icon
             actions: <Widget>[Container()],
             automaticallyImplyLeading: false,flexibleSpace:
             Container(
@@ -279,7 +279,8 @@ UiViewsWidget.showprogressdialogcomplete(context, false);
         // UPDATE COMMUNITY ID ADD USER LIST
         Firestore.instance.collection("users").document(usermainlist.userdocid).updateData({"communitieslist":FieldValue.arrayRemove([widget.communityid])}).then((ondata){
           // UPDATE COMMUNITY ID ADD USER LIST
-          setState(() {
+          setState(()
+          {
             usermainlist.allredyadded=false;
           });
           UiViewsWidget.showprogressdialogcomplete(context, false);

@@ -49,40 +49,63 @@ class _NEwsFeedItemWidgetcreatestate extends State<NewsFeedITemWidget>{
                       InkWell(onTap: () {
                         _returnwithdetaildialogbox(widget.newsfeedlist[index]);
                       }, child:
-                      Column(mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Padding(padding: EdgeInsets.only(left: 20),
-                            child:
-                            Text(widget.newsfeedlist[index].newstitle,
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18
-                              ),
-                              textAlign: TextAlign.left,),
-                          ),
-                          SizedBox(height: 5,),
+                          Row(
+                            children: <Widget>[
+                            Expanded(child:Column(mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Padding(padding: EdgeInsets.only(left: 20),
+                                  child:
+                                  Text(widget.newsfeedlist[index].newstitle,
+                                    style: TextStyle(
+                                        color: Colors.black87,
 
-                          /// SUBTITLE AND TIME
-                          Padding(padding: EdgeInsets.only(left: 20, right: 5),
-                              child: Row(children: <Widget>[
-                                Expanded(child: Text(
-                                  widget.newsfeedlist[index].newssubtitle,
-                                  style: TextStyle(
-                                      color: MyColors.lightgrey, fontSize: 14
-                                  ),
-                                  textAlign: TextAlign.left,)),
-                                Text(UiViewsWidget.timesagofeacture(
+                                        fontSize: 18
+                                    ),
+                                    textAlign: TextAlign.left,),
+                                ),
+                                SizedBox(height: 5,),
+
+                                /// SUBTITLE AND TIME
+                                Padding(padding: EdgeInsets.only(left: 20, right: 5),
+                                    child: Row(children: <Widget>[
+                                      Expanded(child: Text(
+                                        widget.newsfeedlist[index].newssubtitle,
+                                        style: TextStyle(
+                                            color: MyColors.lightgrey, fontSize: 14
+                                        ),
+                                        textAlign: TextAlign.left,)),
+
+                                      /*Text(UiViewsWidget.timesagofeacture(
                                     widget.newsfeedlist[index].newsposttime),
                                   style: TextStyle(
                                       color: MyColors.lightgrey, fontSize: 14
                                   ),
-                                  textAlign: TextAlign.left,),
-                              ],)
-                          ),
-                          SizedBox(height: 5,),
-                        ],),),
+                                  textAlign: TextAlign.left,),*/
+                                    ],)
+                                ),
+                                SizedBox(height: 5,),
+                              ],)),
+                              Expanded(child:Container(
+                                  alignment: Alignment.centerRight,
+                                  child:
+                              InkWell(onTap: () {
+                              _bookmarkstatechange(
+                                  widget.newsfeedlist[index]);
+                            },
+                                child: widget.newsfeedlist[index].bookmark ==
+                                    false ?
+                                Image.asset(
+                                  ConstantsForImages.bookmark,
+                                  height: 30,
+                                  width: 30,) :
+                                Image.asset(
+                                  ConstantsForImages.bookmarked,
+                                  height: 30,
+                                  width: 30,)))),
+                          ],)
+
+                      ,),
                       //// BANNER IAMGE
                       FadeInImage(
                         height: 200,
@@ -122,11 +145,22 @@ class _NEwsFeedItemWidgetcreatestate extends State<NewsFeedITemWidget>{
                                       ConstantsForImages.imgplaceholder),),),
                               ),
                               SizedBox(width: 3,),
-                              Text(widget.newsfeedlist[index].uploadername,
-                                style: TextStyle(
-                                    color: MyColors.lightgrey, fontSize: 14
-                                ),
-                                textAlign: TextAlign.left,)
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                Text(widget.newsfeedlist[index].uploadername,
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 14
+                                  ),
+                                  textAlign: TextAlign.left,),
+                                Text(UiViewsWidget.timesagofeacture(
+                                    widget.newsfeedlist[index].newsposttime),
+                                  style: TextStyle(
+                                      color: MyColors.lightgrey, fontSize: 12
+                                  ),
+                                  textAlign: TextAlign.left,),
+                              ],)
+
                             ],)),
                             ),
                             Row(children: <Widget>[
@@ -162,20 +196,7 @@ class _NEwsFeedItemWidgetcreatestate extends State<NewsFeedITemWidget>{
                                     width: 30,)),
 
                               SizedBox(width: 5,),
-                              InkWell(onTap: () {
-                                _bookmarkstatechange(
-                                    widget.newsfeedlist[index]);
-                              },
-                                  child: widget.newsfeedlist[index].bookmark ==
-                                      false ?
-                                  Image.asset(
-                                    ConstantsForImages.bookmark,
-                                    height: 30,
-                                    width: 30,) :
-                                  Image.asset(
-                                    ConstantsForImages.bookmarked,
-                                    height: 30,
-                                    width: 30,)),
+
 
                             ],),
                           ],)

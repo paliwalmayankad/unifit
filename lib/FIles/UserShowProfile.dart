@@ -230,12 +230,13 @@ int following=0;
       preferredSize: Size.fromHeight(40+statusbarHeight),
 
       // here the desired height
-      child:AppBar( backgroundColor: MyColors.basegreencolor, // this will hide Drawer hamburger icon
+      child:AppBar( backgroundColor: Colors.white, // this will hide Drawer hamburger icon
           actions: <Widget>[Container()],
           automaticallyImplyLeading: false,flexibleSpace:
-          Container(padding: new EdgeInsets.only(top: statusbarHeight),
+          Container( alignment: Alignment.center,
+            padding: new EdgeInsets.only(top: statusbarHeight),
 
-            child: Image.asset(ConstantsForImages.bfitsplashlogo),
+            child: Image.asset(ConstantsForImages.bfitsplashlogo,height: 50, ),
           )));}
 
   void _calluserdetailget() {

@@ -357,6 +357,9 @@ final Map<int,Widget> segmentvalue=const<int,Widget>{0:Text("1",style: TextStyle
       "pressure":"0",
       "pulse":"0",
       "caloriesburned":"0",
+      "usertype":"3",
+      "trainerid":"",
+      "tags":[],
 
     };
     PrefrencesManager.setBool(Stringconstants.LOGIN, true);

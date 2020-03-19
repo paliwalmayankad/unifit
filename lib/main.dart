@@ -79,7 +79,7 @@ class SplashScreenState extends State<MyApp> {
                     children: <Widget>[
                       SizedBox(height: 200, child:
                       Image.asset(
-                        ConstantsForImages.bfitsplashlogo, fit: BoxFit.cover,)
+                        ConstantsForImages.bfitsplashlogo, fit: BoxFit.fill,)
                       ),
 
 
@@ -211,7 +211,7 @@ class SplashScreenState extends State<MyApp> {
                     Column(children: <Widget>[
                       Align(alignment: Alignment.topLeft,
                           child: Container(child: Text("OTP", style: TextStyle(
-                              color: Colors.white,
+                              color: Colors.black,
                               fontSize: 18,
                               fontWeight: FontWeight.bold),)
                           )),
@@ -246,8 +246,9 @@ class SplashScreenState extends State<MyApp> {
                               strokeWidth: 0,
                               gapSpace: 10,
 
-                              enteredColor: Colors.white,
+                              enteredColor: Colors.black,
                               solidColor: Colors.white,
+                              strokeColor: Colors.black,
                               obscureStyle: ObscureStyle(
                                 isTextObscure: _obscureEnable,
 

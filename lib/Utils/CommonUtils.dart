@@ -1,3 +1,4 @@
+import 'package:unifit/FIles/BecomeTrainerFIle.dart';
 import 'package:unifit/FIles/BodyParametersFIle.dart';
 import 'package:unifit/FIles/CreateNewsFIle.dart';
 import 'package:unifit/FIles/DashboardFile.dart';
@@ -32,6 +33,7 @@ class CommonUtils{
       '/blocklistfile': (context) => MyBlockListFile(),
       '/mysubscriptionfile': (context) => MySubscriptionFile(),
       '/mypaymentlist': (context) => MyPaymentFile(),
+      '/becometrainer': (context) => BecomeTrainerFIle(),
 
 
 

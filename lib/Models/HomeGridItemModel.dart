@@ -6,4 +6,9 @@ class HomeGridItemModel{
   List<dynamic> facilities;
   String priceforbuy;
 String timeduration;
+String subtitle;
+bool isquery;
+List<dynamic> paymentusers;
+bool allredypurchase=false;
+String monthyeaerday;
 }

@@ -4,6 +4,8 @@ import 'package:bezier_chart/bezier_chart.dart';
 import 'package:unifit/ImageHandler/ImagePickerHandler.dart';
 import 'package:unifit/Utils/ConstantsForImages.dart';
 import 'package:unifit/Utils/MyColors.dart';
+import 'package:unifit/Utils/PrefrencesManager.dart';
+import 'package:unifit/Utils/Stringconstants.dart';
 import 'package:unifit/Utils/UiViewsWidget.dart';
 import 'package:flutter/material.dart';
 
@@ -19,6 +21,7 @@ class _MyPRofileCreateState extends State<MyProfileFile> with TickerProviderStat
   File _image;
   ImagePickerHandler imagePicker;
   AnimationController _controller;
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -39,6 +42,7 @@ class _MyPRofileCreateState extends State<MyProfileFile> with TickerProviderStat
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
+      key: _scaffoldKey,
         body:
     Container(decoration: UiViewsWidget.BackgroundImage(),child:
     SingleChildScrollView(scrollDirection: Axis.vertical,
@@ -116,6 +120,16 @@ class _MyPRofileCreateState extends State<MyProfileFile> with TickerProviderStat
              },
              child:Container(height: 60, child:UiViewsWidget.greenbuttonwithtext("My payments") ,)),
          SizedBox(height: 15,),
+
+         //// FOR BECOME TRAINER
+       PrefrencesManager.getString(Stringconstants.ROLE)=="user"?  InkWell(
+             onTap: (){
+               PrefrencesManager.getString(Stringconstants.TRAINERREQUSETID)==null||PrefrencesManager.getString(Stringconstants.TRAINERREQUSETID)==""?
+               Navigator.pushNamed(context, "/becometrainer"):UiViewsWidget.bottomsnackbar(context, "you allredy request for trainer. your verification is pending.", _scaffoldKey);
+
+             },
+             child:Container(height: 60, child:UiViewsWidget.greenbuttonwithtext("Become Trainer") ,)):SizedBox(),
+
        ],)
        ,)
 

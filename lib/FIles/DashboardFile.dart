@@ -22,6 +22,7 @@ import 'ChatScreenFile.dart';
 import 'ExerciseHeaderFile.dart';
 import 'GymListFile.dart';
 import 'SettingFile.dart';
+import 'UserTrianerListFile.dart';
 
 
 class DashboardFile extends StatefulWidget {
@@ -74,14 +75,20 @@ currentPage=0;
       body: Container(decoration: UiViewsWidget.BackgroundImage(), child: Screenview),
       key: scaffoldState,
       appBar: getAppBar(),
-      floatingActionButton: floatingbuttonstatevisible==true?InkWell(
-          onTap: (){
+      floatingActionButton: floatingbuttonstatevisible==true?FloatingActionButton(
+          onPressed: (){
             scaffoldState.currentState.openEndDrawer();
 
           },
+
           child:
+
           Container(height: 70,width: 70,
-            child: Image.asset(ConstantsForImages.bfitsplashlogo),)):SizedBox(),
+            child: Image.asset(ConstantsForImages.bfitsplashlogo),),
+        backgroundColor: Colors.white,
+
+
+      ):SizedBox(),
       endDrawer: UiViewsWidget.draweritemandcontainer(context,scaffoldState,Screenview),
 
 
@@ -99,20 +106,23 @@ currentPage=0;
         preferredSize: Size.fromHeight(40+statusbarHeight),
 
         // here the desired height
-        child:AppBar( backgroundColor: MyColors.basegreencolor, // this will hide Drawer hamburger icon
+        child:AppBar( backgroundColor:Colors.white, // this will hide Drawer hamburger icon
             actions: <Widget>[Container()],
             automaticallyImplyLeading: false,flexibleSpace:
             Container(
               alignment: Alignment.center,
               padding: new EdgeInsets.only(top: statusbarHeight,left: 5,right: 5),
 
-              child:dashboardappbar==true? Image.asset(ConstantsForImages.bfitsplashlogo)
+              child:dashboardappbar==true? Image.asset(ConstantsForImages.bfitsplashlogo,height: 50, fit: BoxFit.fill,)
                   :Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children:
               <Widget>[
-                Image.asset(ConstantsForImages.bfitsplashlogo,height: 30,width: 30,),
+                Container(
+                  padding: EdgeInsets.only(top: 5,bottom: 5),
+                  child:
+                Image.asset(ConstantsForImages.bfitsplashlogo,height: 20,width: 20,),),
 
                 new Spacer(),
                 Text("Communities",style: TextStyle(fontSize:18,color: MyColors.basetextcolor,fontWeight: FontWeight.bold),),
@@ -221,6 +231,12 @@ currentPage=0;
         setState(() {
           currentPage=1;
         Screenview=WorkoutsFile(callback: this.callback,);
+        });
+      }if(state==phoneass.trainers)
+      {
+        setState(() {
+          currentPage=1;
+        Screenview=UserTrainerListFile(callback: this.callback,);
         });
       }
  if(state==phoneass.setting)

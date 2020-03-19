@@ -72,33 +72,14 @@ class CommunitiesFileState extends State<CommunitiesFile>
               cmm.communitiyposts =dss.data['communitiyposts'];
               cmm.createrid =dss.data['createrid'];
               communitylist.add(cmm);
-              if(i==communitieslistid.length-1){
-                setState(() {
+              if(i==communitieslistid.length-1)
+              {
+                setState(()
+                {
                   mainview=true;
                 });
               }
             }
-           /* Firestore.instance.collection("communities").document(communitieslistid[i]).get().then((ondata){
-              CommunitiesListModels cmm=new CommunitiesListModels();
-              cmm.documentid= ondata.documentID;
-              cmm.title=ondata.data['title'];
-              cmm.image=ondata.data['image'];
-              cmm.shortdescription=ondata.data['shortdescription'];
-              cmm.communitiyposts =ondata.data['communitiyposts'];
-              cmm.createrid =ondata.data['createrid'];
-              communitylist.add(cmm);
-              if(i==communitieslistid.length-1){
-                setState(() {
-                  mainview=true;
-                });
-              }
-            });*/
-          
-          
-          
-          
-          
-          
 
         }
         
@@ -106,7 +87,8 @@ class CommunitiesFileState extends State<CommunitiesFile>
       }
       else
         {
-        setState(() {
+        setState(()
+        {
           mainview=true;
         });
       }

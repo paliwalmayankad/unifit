@@ -318,7 +318,7 @@ class ChatScreenFileState extends State<ChatScreenFile>
         preferredSize: Size.fromHeight(50+statusbarHeight),
 
         // here the desired height
-        child:AppBar( backgroundColor: MyColors.basegreencolor, // this will hide Drawer hamburger icon
+        child:AppBar( backgroundColor:Colors.white, // this will hide Drawer hamburger icon
             actions: <Widget>[Container()],
             automaticallyImplyLeading: false,flexibleSpace:
             Container(padding: new EdgeInsets.only(top: statusbarHeight),

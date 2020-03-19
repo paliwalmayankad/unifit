@@ -13,5 +13,8 @@ class Stringconstants{
   static String USERPHOTO="USERPHOTO";
   static String RAZORPAYPAYMENTKEY="rzp_test_KERk4LGVemMTeU";
   static String youtubevideokey="<AIzaSyA8wCR8iCxE_tyY3EOVlCTQgfnfoV4YGqI>";
+  static String TRAINERREQUSETID="TRAINERREQUESTID";
+  static String TRAINERTYPEINT="TRAINERTYPEINT";
+
 
 }

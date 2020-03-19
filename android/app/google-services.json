@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "818804257051-hhpqtcjlllnlc4jc4gc98t06lq753brm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.aaronsoftech.unifit",
+            "certificate_hash": "68f6a1eda339932659e25507406dbecbae0adffc"
+          }
+        },
+        {
           "client_id": "818804257051-7vr80auic9o6t0sok7krdhj7ji80it0o.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

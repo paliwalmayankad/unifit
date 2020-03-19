@@ -6,6 +6,7 @@ import 'package:unifit/Models/GymListModels.dart';
 import 'package:unifit/Models/HomeGridItemModel.dart';
 import 'package:unifit/Models/NewsModels.dart';
 import 'package:unifit/Models/UserprofileModels.dart';
+import 'package:unifit/Models/UsertrainerModels.dart';
 import 'package:unifit/Models/WorkoutModels.dart';
 import 'package:unifit/Utils/ConstantsForImages.dart';
 import 'package:unifit/Utils/PrefrencesManager.dart';
@@ -44,6 +45,7 @@ class FireBase {
         PrefrencesManager.setString(Stringconstants.NAME, querySnapshot.documents[0].data['name']);
         PrefrencesManager.setString(Stringconstants.ROLE, querySnapshot.documents[0].data['role']);
         PrefrencesManager.setString(Stringconstants.USERPHOTO, querySnapshot.documents[0].data['img']);
+        PrefrencesManager.setString(Stringconstants.TRAINERTYPEINT, querySnapshot.documents[0].data['usertype'].toString());
 
 
         return true;
@@ -77,14 +79,29 @@ class FireBase {
     QuerySnapshot querySnapshot = await Firestore.instance.collection("services").getDocuments();
     var list = querySnapshot.documents;
     for(int i=0;i<list.length;i++){
-      HomeGridItemModel hmodel =new HomeGridItemModel();
-      hmodel.documentid=list[i].documentID;
-      hmodel.texttitle=list[i].data["title"];
-      hmodel.img=list[i].data["img"];
-      hmodel.timeduration=list[i].data["validtimeforbuy"];
-      hmodel.priceforbuy=list[i].data["price"];
-      hmodel.facilities=list[i].data["facilities"];
-      gridmodel.add(hmodel);
+      if(list[i].data["status"]=="active"){
+        HomeGridItemModel hmodel =new HomeGridItemModel();
+        hmodel.documentid=list[i].documentID;
+        hmodel.texttitle=list[i].data["title"];
+        hmodel.img=list[i].data["img"];
+        hmodel.subtitle=list[i].data["subtitle"];
+        hmodel.timeduration=list[i].data["validtimeforbuy"];
+        hmodel.priceforbuy=list[i].data["price"];
+        hmodel.facilities=list[i].data["facilities"];
+        hmodel.isquery=list[i].data["isquery"];
+        hmodel.monthyeaerday=list[i].data["monthyearday"];
+        if(list[i].data.containsKey("userspayment")){
+        hmodel.paymentusers=list[i].data["userspayment"];
+
+        for(int i=0;i<hmodel.paymentusers.length;i++){
+          if(hmodel.paymentusers[i]==PrefrencesManager.getString(Stringconstants.USERID)){
+            hmodel.allredypurchase=true;
+          }
+        }}
+        gridmodel.add(hmodel);
+      }
+
+
 
     }
     return gridmodel;
@@ -501,7 +518,7 @@ class FireBase {
       DocumentSnapshot querySnapshot = await   Firestore.instance.collection("users").document(PrefrencesManager.getString(Stringconstants.USERID)).get();
       List<WorkoutModels> workoutls=new List();
 
-      List<dynamic>workoutlist =querySnapshot.data['userworkoutlist'];
+      List<dynamic>workoutlist =querySnapshot.data['myworkoutlist'];
       for(int i=0;i<workoutlist.length;i++){
         WorkoutModels wm=new WorkoutModels();
         Map<dynamic,dynamic> wmmap=workoutlist[i];
@@ -564,6 +581,34 @@ return workoutls;
     {
       print(e);
     }
+  }
+
+
+  static Future<List<UsertrainerModels>> gettrainerlist() async{
+    List<UsertrainerModels> trainerlist= List();
+    QuerySnapshot querySnapshot = await Firestore.instance.collection("users").getDocuments();
+    var list = querySnapshot.documents;
+    for(int i=0;i<list.length;i++)
+    {
+      if(list[i].data['usertype']!="3"){
+
+
+
+      UsertrainerModels trainermodels =new UsertrainerModels();
+      trainermodels.userid=list[i].documentID;
+      trainermodels.name=list[i].data["name"];
+      trainermodels.trainerphoto=list[i].data["trainerphoto"];
+      trainermodels.address=list[i].data["address"];
+      trainermodels.mobile=list[i].data["mobile"];
+      trainermodels.usertype=list[i].data["usertype"];
+      trainermodels.tags=list[i].data["tags"];
+      trainerlist.add(trainermodels);
+      }
+    }
+
+
+    return trainerlist;
+
   }
 
 }
